@@ -103,7 +103,7 @@ function setupDialog(plugin)
     end
 
     setup_dlg:shades { id = "palette",
-                       label = "Shades",
+                       label = "Palette",
                        mode = "sort",
                        colors = paletteColors,
                        onclick = function(ev)
@@ -302,7 +302,7 @@ function generateSlices(data, numberOfSprites, sprite, columns)
     for i = 1, numberOfSprites do
         local x = ((i - 1) % columns) * width
         local y = math.floor((i - 1) / columns) * height
-        print(dump(sourceImage.cel.bounds))
+        --print(dump(sourceImage.cel.bounds))
         outputImage:drawImage(sourceImage, x + left, y + top)
         replaceColors(data, i);
         local slice = targetSprite:newSlice(
