@@ -12,8 +12,12 @@ jobs:
           chmod +x ./build.sh
           ./build.sh
         shell: bash
-      - name: Create Release
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
       - uses: actions/checkout@v2
-      - uses: ncipollo/release-action@v1.12.0
+      - uses: ncipollo/release-action@v1
         with:
-          artifact: ./sprite-variant.aseprite-extension
+          artifacts: "sprite-variant.aseprite-extension"
