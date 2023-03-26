@@ -47,7 +47,6 @@ function setupDialog(plugin)
     }
 
     setup_dlg:entry { id = "baseName",
-                      label = "base name:",
                       text = plugin.preferences.baseName,
                       onchange = function(ev)
                           setup_dlg:modify {
@@ -57,7 +56,6 @@ function setupDialog(plugin)
                       end,
     }
     setup_dlg:entry { id = "divider",
-                      label = "divider:",
                       text = plugin.preferences.divider,
                       onchange = function(ev)
                           setup_dlg:modify {
@@ -129,13 +127,11 @@ function generationDialog(plugin, numberOfSprites, sprite, output, selectedColor
             "Sprite Generator"
     )
 
-    dlg:label { id = "label", text = "Generating: " .. numberOfSprites .. " " .. output .. " from " .. sprite.filename .. "..." }
-       :newrow()
-       :separator()
+    --dlg:label { id = "label", text = "Generating: " .. numberOfSprites .. " " .. output .. " from " .. sprite.filename .. "..." }
+    --   :newrow()
+    --   :separator()
 
-    if output == "slices" or output == "sprites" then
-        dlg:entry { id = "baseName", label = "Base name:", text = baseName }
-        dlg:entry { id = "divider", label = "Divider:", text = divider }
+    if output == "slices" then
         dlg:slider { id = "columns",
                      label = "Columns:",
                      min = 1,
@@ -151,13 +147,17 @@ function generationDialog(plugin, numberOfSprites, sprite, output, selectedColor
     for i = 1, numberOfSprites do
 
         if (output == "sprites") or (output == "slices") then
-            dlg:entry { id = "colorName_" .. i, label = "Color name:", text = baseName .. divider .. i }
+            dlg:entry { id = "colorName_" .. i, label = "Name", text = baseName .. divider .. i }
         end
 
-        dlg:color { id = "color_1_" .. i, label = "Color " .. i, color = selectedColors[doubleStep] }
-        dlg:color { id = "color_2_" .. i, label = "Color " .. i, color = selectedColors[doubleStep + 1] }
+        dlg:newrow { always = false }
+
+        dlg:color { id = "color_1_" .. i, color = selectedColors[doubleStep] }
+        dlg:color { id = "color_2_" .. i, color = selectedColors[doubleStep + 1] }
 
         doubleStep = doubleStep + 2
+
+        dlg:separator()
     end
 
     dlg:button { id = "cancel", text = "Cancel" }
@@ -199,12 +199,12 @@ function init(plugin)
 
             local generation_data = generationDialog(plugin, numberOfSprites, sprite, output, selectedColors, baseName, divider)
 
-            local columns = generation_data.columns
-            plugin.preferences.columns = columns
-
             if generation_data == nil then
                 return
             end
+
+            local columns = generation_data.columns
+            plugin.preferences.columns = columns
 
             if output == "sprites" then
                 generateSprites(generation_data, numberOfSprites, sprite)
