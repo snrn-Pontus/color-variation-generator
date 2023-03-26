@@ -1,7 +1,8 @@
 on:
   push:
     branches:
-      - master
+      tags:
+        - '*'
 jobs:
   package-extension:
     runs-on: ubuntu-latest
