@@ -4,11 +4,12 @@ on:
       - master
 jobs:
   package-extension:
-    - uses: actions/checkout@v2
-      steps:
-        - name: Package
-          run: |
-            chmod +x ./build.sh
-            ./build.sh
-          shell: bash
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Package
+        run: |
+          chmod +x ./build.sh
+          ./build.sh
+        shell: bash
 
