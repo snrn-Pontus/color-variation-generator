@@ -1,13 +1,14 @@
 on:
   push:
     branches:
-    - master
+      - master
 jobs:
-    package-extension:
-      runs-on: ubuntu-latest
+  package-extension:
+    - uses: actions/checkout@v2
       steps:
         - name: Package
           run: |
             chmod +x ./build.sh
             ./build.sh
           shell: bash
+
