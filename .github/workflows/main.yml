@@ -1,0 +1,12 @@
+on:
+  push:
+    branches:
+    - main
+    - release/*
+jobs:
+    package-extension:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Package
+          run: sh ./build.sh
+    
