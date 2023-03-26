@@ -7,5 +7,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Package
-          run: bash ./build.sh
-    
+          run: |
+            chmod +x ./build.sh
+            ./build.sh
+          shell: bash
