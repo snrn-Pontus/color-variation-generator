@@ -1,18 +1,30 @@
 {
-  "name": "sprite-variant",
-  "displayName": "Sprite variant",
-  "description": "My scripts do something",
+  "name": "color_variation_generator",
+  "displayName": "Color Variation Generator",
+  "description": "Generates recolored sprites",
   "version": "0.1",
-  "author": { "name": "FirstName LastName",
+  "author": {
+    "name": "FirstName LastName",
     "email": "my@email.com",
-    "url": "https://snrn.se/" },
-  "contributors": [ ],
+    "url": "https://snrn.se/"
+  },
+  "contributors": [],
   "publisher": "snrn",
   "license": "CC-BY-4.0",
-  "categories": [ "Scripts" ],
+  "categories": [
+    "Scripts"
+  ],
   "contributes": {
+    "keys": [
+      {
+        "id": "cvg_keys",
+        "path": "./cvg_keys"
+      }
+    ],
     "scripts": [
-      { "path": "./script.lua" }
+      {
+        "path": "./script.lua"
+      }
     ]
   }
 }

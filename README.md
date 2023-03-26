@@ -11,11 +11,7 @@ This extension will generate variations of a sprite based on color pair you sele
 
 White is replaced by the first color, black is replaced by the second color.
 
-
-## Limitations
-
-Right now you have to make sure the sprite image covers the whole width and height of the canvas (no transparent pixels on the edges), when generating slices.
-You can color the transparent pixels with a placeholder color (like magenta) and then replace them with transparency in the output.
+The default hotkey is `Ctrl+G`
 
 ## Setup
 

@@ -36,15 +36,6 @@ function setupDialog(plugin)
         plugin.preferences.selectedColors = {}
     end
 
-    --setup_dlg:button {
-    --    id = "debug",
-    --    text = "Debug",
-    --    onclick = function()
-    --        print(dump(plugin.preferences))
-    --        print(dump(setup_dlg.data))
-    --    end
-    --}
-
     setup_dlg:combobox { id = "output",
                          label = "Output:",
                          option = plugin.preferences.output,
@@ -54,21 +45,6 @@ function setupDialog(plugin)
                              "sprites",
                          },
     }
-
-    --setup_dlg:number { id = "columns",
-    --                   label = "Columns:",
-    --                   text = plugin.preferences.columns,
-    --                   decimals = 0,
-    --}
-
-    setup_dlg:slider { id = "columns",
-                       label = "Columns:",
-                       min = 1,
-                       max = 10,
-                       value = plugin.preferences.columns,
-                       onchange = function(ev)
-                           plugin.preferences.columns = ev.value
-                       end }
 
     setup_dlg:entry { id = "baseName",
                       label = "base name:",
@@ -147,7 +123,7 @@ function setupDialog(plugin)
     end
 end
 
-function generationDialog(numberOfSprites, sprite, output, selectedColors, baseName, divider)
+function generationDialog(plugin, numberOfSprites, sprite, output, selectedColors, baseName, divider)
 
     local dlg = Dialog(
             "Sprite Generator"
@@ -156,6 +132,19 @@ function generationDialog(numberOfSprites, sprite, output, selectedColors, baseN
     dlg:label { id = "label", text = "Generating: " .. numberOfSprites .. " " .. output .. " from " .. sprite.filename .. "..." }
        :newrow()
        :separator()
+
+    if output == "slices" then
+        dlg:entry { id = "baseName", label = "Base name:", text = baseName }
+        dlg:entry { id = "divider", label = "Divider:", text = divider }
+        dlg:slider { id = "columns",
+                     label = "Columns:",
+                     min = 1,
+                     max = 10,
+                     value = plugin.preferences.columns,
+                     onchange = function(ev)
+                         plugin.preferences.columns = ev.value
+                     end }
+    end
 
     local doubleStep = 1
 
@@ -187,8 +176,8 @@ end
 
 function init(plugin)
     plugin:newCommand {
-        id = "sprite_variant",
-        title = "Generate variants",
+        id = "color_variation_generator",
+        title = "Generate color variations",
         group = "edit_new",
         onclick = function()
             local setup_data = setupDialog(plugin)
@@ -211,7 +200,7 @@ function init(plugin)
 
             local sprite = app.activeSprite
 
-            local generation_data = generationDialog(numberOfSprites, sprite, output, selectedColors, baseName, divider)
+            local generation_data = generationDialog(plugin, numberOfSprites, sprite, output, selectedColors, baseName, divider)
 
             if generation_data == nil then
                 return
@@ -288,27 +277,32 @@ function generateSlices(data, numberOfSprites, sprite, columns)
 
     local left = sourceImage.cel.bounds.x;
     local top = sourceImage.cel.bounds.y;
-    local right = sourceImage.cel.bounds.x + sourceImage.cel.bounds.width;
-    local bottom = sourceImage.cel.bounds.y + sourceImage.cel.bounds.height;
+    --local right = sourceImage.cel.bounds.x + sourceImage.cel.bounds.width;
+    --local bottom = sourceImage.cel.bounds.y + sourceImage.cel.bounds.height;
 
     local width = sprite.width
     local height = sprite.height
 
     targetSprite = Sprite(width * columns, height * math.ceil(numberOfSprites / columns))
-    app.command.BackgroundFromLayer()
 
     local outputImage = app.activeCel.image
 
     for i = 1, numberOfSprites do
         local x = ((i - 1) % columns) * width
         local y = math.floor((i - 1) / columns) * height
-        --print(dump(sourceImage.cel.bounds))
         outputImage:drawImage(sourceImage, x + left, y + top)
-        replaceColors(data, i);
         local slice = targetSprite:newSlice(
                 Rectangle(x, y, width, height)
         )
         slice.name = data["colorName_" .. i]
+    end
+
+    for i = 1, numberOfSprites do
+        local x = ((i - 1) % columns) * width
+        local y = math.floor((i - 1) / columns) * height
+        local selection = Selection(Rectangle(x, y, width, height))
+        app.activeSprite.selection = selection
+        replaceColors(data, i);
     end
 
     app.refresh()
