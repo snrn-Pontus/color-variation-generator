@@ -133,7 +133,7 @@ function generationDialog(plugin, numberOfSprites, sprite, output, selectedColor
        :newrow()
        :separator()
 
-    if output == "slices" then
+    if output == "slices" or output == "sprites" then
         dlg:entry { id = "baseName", label = "Base name:", text = baseName }
         dlg:entry { id = "divider", label = "Divider:", text = divider }
         dlg:slider { id = "columns",
@@ -189,9 +189,6 @@ function init(plugin)
             local output = setup_data.output
             plugin.preferences.output = output
 
-            local columns = setup_data.columns
-            plugin.preferences.columns = columns
-
             local selectedColors = setup_data.shades
             local baseName = setup_data.baseName
             local divider = setup_data.divider
@@ -201,6 +198,9 @@ function init(plugin)
             local sprite = app.activeSprite
 
             local generation_data = generationDialog(plugin, numberOfSprites, sprite, output, selectedColors, baseName, divider)
+
+            local columns = generation_data.columns
+            plugin.preferences.columns = columns
 
             if generation_data == nil then
                 return
